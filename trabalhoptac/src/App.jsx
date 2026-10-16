@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import "./index.css";
 
 export default function App (){
@@ -23,6 +23,21 @@ export default function App (){
     setNovaIdeia("");
     setErro("");
   }
+  function alternar(id){
+    setIdeias((atual)=>{
+      return atual.map((ideia)=>{
+        if(ideia.id==id){
+          return{
+            ...ideia,
+            feita: !ideia.feita
+          };
+        }
+        return ideia
+      })
+
+    })
+  }
+
 return (
   <main>
     <h1>Painel de Ideias</h1>
@@ -40,11 +55,20 @@ return (
       placeholder="Sua ideia" />
       <button type="submit">Adicionar</button>
     </form>
-    {erro && <p>erro</p>}
+    {erro && <p>{erro}</p>}
 
     <ul>
       {ideias.map((ideia) => (
-        <li key ={ideia.id}>{ideias.id}</li>
+        <li key ={ideia.id}>{ideias.id}
+        <input 
+        type="checkbox"
+        checked = {ideia.feita}
+        onChange={() => alternar(ideia.id)} />
+        <span
+          className={ideia.feita?"concluida" : ""}>
+          {ideia.texto}
+        </span>
+        </li>
       ))}
     </ul>
   </main>
