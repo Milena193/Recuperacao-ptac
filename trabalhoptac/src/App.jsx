@@ -8,7 +8,7 @@ export default function App (){
   function aoAdicionar (event){
     event.preventDefault();
     if (novaIdeia.trim ()==""){
-      setErro("Digite sua ideia");
+      setErro("Digite sua ideia antes de adicionar.");
       return;
     }
     setErro("");
@@ -37,6 +37,19 @@ export default function App (){
 
     })
   }
+  function remover(id){
+    setIdeias((atual)=>{
+      return atual.filter((ideia)=>
+        ideia.id !==id)
+
+    });
+  }
+  const totasIdeias = ideias.length;
+  const todasConcluidas = ideias.filter((ideia) => {
+    return ideia.feita;
+  }).length;
+
+
 
 return (
   <main>
@@ -50,7 +63,6 @@ return (
       onChange={(event)=>{
         setNovaIdeia(event.target.value);
         setErro("");
-        
       }}
       placeholder="Sua ideia" />
       <button type="submit">Adicionar</button>
@@ -58,19 +70,32 @@ return (
     {erro && <p>{erro}</p>}
 
     <ul>
-      {ideias.map((ideia) => (
-        <li key ={ideia.id}>{ideias.id}
+      {ideias.map((ideia) => {
+        let classe ="";
+        if(ideia.feita){
+          classe = "concluida";
+        }
+      
+      return(
+        <li key ={ideia.id}>
         <input 
         type="checkbox"
         checked = {ideia.feita}
         onChange={() => alternar(ideia.id)} />
-        <span
-          className={ideia.feita?"concluida" : ""}>
+        
+        <span className={classe} >
           {ideia.texto}
         </span>
+
+        <button type="button"
+        onClick={()=> remover(ideia.id)}> X </button>
         </li>
-      ))}
+      );
+})}
     </ul>
+    <footer>
+      {`${totasIdeias} ideias no painel . ${todasConcluidas} concluídas`}
+    </footer>
   </main>
 )
 
